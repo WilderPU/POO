@@ -39,24 +39,28 @@ float mat_shininess_blanco = 100.0;
 
 
 
-//Piramide
-double vert[5][3] = { { 0.5, 0.0, -0.5},
-					  {-0.5, 0.0, -0.5},
-					  {-0.5, 0.0,  0.5},
-					  { 0.5, 0.0,  0.5},
-					  { 0.0, 1.0,  0.0} };
+//Piramide               0    1     2
+double vert[5][3] = { { 0.5, 0.0, -0.5}, // 0
+					  {-0.5, 0.0, -0.5}, // 1
+					  {-0.5, 0.0,  0.5}, // 3
+					  { 0.5, 0.0,  0.5}, // 4
+					  { 0.0, 1.0,  0.0}  // 5
+};
 
-int face[6][3] = { {0, 1, 4},
-	               {1, 2, 4},
-	               {2, 3, 4},
-	               {3, 0, 4},
-	               {3, 2, 0},
-	               {2, 1, 0} };
+//					0  1  2
+int face[6][3] = { {0, 1, 4},  //0
+	               {1, 2, 4},  //1
+	               {2, 3, 4},  //2
+	               {3, 0, 4},  //3
+	               {3, 2, 0},  //4
+	               {2, 1, 0}   //5
+};
+
 
 void CalcNormV(double a[3], double b[3], double c[3], double N[3])
 {
 	double Vab[3], Vac[3], norm;
-
+	
 	for (int i = 0; i < 3; i++)
 	{
 		Vab[i] = b[i] - a[i];
@@ -70,7 +74,7 @@ void CalcNormV(double a[3], double b[3], double c[3], double N[3])
 	norm = sqrt(N[0] * N[0] + N[1] * N[1] + N[2] * N[2]);
 
 	for (int i = 0; i < 3; i++)
-		N[i] = N[i] / norm;
+		N[i] = N[i] / norm; //Este es el vector normal (unitario)
 }
 
 
@@ -92,7 +96,7 @@ void init(void)
 	//------ Trackball -----------
 	gltbInit(GLUT_LEFT_BUTTON/*GLUT_MIDDLE_BUTTON*/);
 	//----------------------------
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FILL para mostrar la figura solida - LINE para ver solo las lineas - POINT para mostrar los vertices
 	glLineWidth(3.0); // cambio el ancho de las lineas
 }
 
@@ -189,9 +193,21 @@ void keyboard(unsigned char key, int x, int y)
 	   printf("input down or socd:6, %lg(sec)\n", dif);
 	   break;
 
-   case 'w':
-   case 'W':
+   case 'N':
+   case 'n':
 	   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	   glLineWidth(3.0);
+	   glutPostRedisplay();
+	   break;
+   case 'b':
+   case 'B':
+	   glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	   glPointSize(5.0);
+	   glutPostRedisplay();
+	   break;
+   case 'm':
+   case 'M':
+	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	   glutPostRedisplay();
 	   break;
 
