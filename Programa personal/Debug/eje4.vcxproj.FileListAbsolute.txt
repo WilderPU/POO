@@ -2,3 +2,4 @@ D:\UNAL La Paz\Materias\Programacion Avanzada\programas\eje - 04 (Trackball)\Deb
 C:\Users\ECM\Desktop\PA\eje - 04 (Trackball)\Debug\eje4.exe
 C:\Users\Wilder Pedraza\Desktop\POO\Debug\eje4.exe
 C:\Users\Wilder Pedraza\Desktop\POO\Programa personal\Debug\eje4.exe
+C:\Users\Wilder Pedraza\OneDrive\Escritorio\POO\Programa personal\Debug\eje4.exe

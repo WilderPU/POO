@@ -85,7 +85,7 @@ void display(void)
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess_azul);
 	glPushMatrix();
 	glTranslatef(0, 0, 0);
-	glutSolidSphere(1, 40, 20);
+	glutSolidSphere(1, 40, 20); 
 	glPopMatrix();
 
 	// esfera 2
