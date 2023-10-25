@@ -1,0 +1,5 @@
+﻿  main.cpp
+  trackball.cpp
+  Generando código...
+main.obj : warning LNK4075: se omite '/EDITANDCONTINUE' debido a la especificación '/SAFESEH'
+  eje4.vcxproj -> C:\Users\Wilder Pedraza\Desktop\POO\Programa personal\Debug\eje4.exe

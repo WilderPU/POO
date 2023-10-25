@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\Wilder Pedraza\Desktop\POO\POO - U\main.cpp(124,3): error C2660: 'calcularNormal': la función no acepta 4 argumentos
+C:\Users\Wilder Pedraza\Desktop\POO\POO - U\main.cpp(49,6): message : vea la declaración de 'calcularNormal'
+C:\Users\Wilder Pedraza\Desktop\POO\POO - U\main.cpp(124,3): message : al hacer coincidir la lista de argumentos '(double [3], double [3], double [3], double [3])'
+  trackball.cpp
+  Generando código...
