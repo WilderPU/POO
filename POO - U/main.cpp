@@ -4,9 +4,13 @@
 #include <math.h>
 #include <time.h> //libreria de tiempo
 #include <GL/glut.h>
+
 //------ trackball----------
 #include "trackball.h" //implementacion del Trackball
-//--------------------------
+//-----------------------
+
+// Incluimos la clase
+#include "Model.h"
 
 //var tiempo
 clock_t start, end;
@@ -56,6 +60,12 @@ int face[6][3] = { {0, 1, 4},  //0
 	               {2, 1, 0}   //5
 };
 
+//Class
+Model *Piramide;
+
+//Prototipos de funciones
+void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
+
 
 void CalcNormV(double a[3], double b[3], double c[3], double N[3])
 {
@@ -97,7 +107,8 @@ void init(void)
 	gltbInit(GLUT_LEFT_BUTTON/*GLUT_MIDDLE_BUTTON*/);
 	//----------------------------
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FILL para mostrar la figura solida - LINE para ver solo las lineas - POINT para mostrar los vertices
-	glLineWidth(3.0); // cambio el ancho de las lineas
+	
+	Piramide = new Model(); //Inicializo la clase dinamica
 }
 
 void display(void)
@@ -175,6 +186,7 @@ void keyboard(unsigned char key, int x, int y)
    {
 	 double dif;
    case 27: 
+	   //Piramide = new ~Model(); //Finalizamos la clase dinamica
 	   exit(0);	
 	   break;
 
