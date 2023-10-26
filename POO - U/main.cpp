@@ -43,6 +43,7 @@ float mat_shininess_blanco = 100.0;
 
 
 
+/*
 //Piramide               0    1     2
 double vert[5][3] = { { 0.5, 0.0, -0.5}, // 0
 					  {-0.5, 0.0, -0.5}, // 1
@@ -53,24 +54,26 @@ double vert[5][3] = { { 0.5, 0.0, -0.5}, // 0
 
 //					0  1  2
 int face[6][3] = { {0, 1, 4},  //0
-	               {1, 2, 4},  //1
-	               {2, 3, 4},  //2
-	               {3, 0, 4},  //3
-	               {3, 2, 0},  //4
-	               {2, 1, 0}   //5
+				   {1, 2, 4},  //1
+				   {2, 3, 4},  //2
+				   {3, 0, 4},  //3
+				   {3, 2, 0},  //4
+				   {2, 1, 0}   //5
 };
+*/
 
 //Class
 Model *Piramide;
 
 //Prototipos de funciones
-void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
+//void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
 
 
+/*
 void CalcNormV(double a[3], double b[3], double c[3], double N[3])
 {
 	double Vab[3], Vac[3], norm;
-	
+
 	for (int i = 0; i < 3; i++)
 	{
 		Vab[i] = b[i] - a[i];
@@ -86,6 +89,7 @@ void CalcNormV(double a[3], double b[3], double c[3], double N[3])
 	for (int i = 0; i < 3; i++)
 		N[i] = N[i] / norm; //Este es el vector normal (unitario)
 }
+*/
 
 
 
@@ -128,6 +132,10 @@ void display(void)
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess_blanco);
 	
 	glPushMatrix();
+	//Piramide->CalcNormModel();
+	Piramide->DrawModel();
+	//Piramide->CalcNormModel();
+	/*
 	int dirf; //direccion en la lista de caras del vertice j
 	double N[3], a[3], b[3], c[3];
 	glBegin(GL_TRIANGLES);
@@ -148,7 +156,8 @@ void display(void)
 			glVertex3d(vert[dirf][0], vert[dirf][1], vert[dirf][2]);
 		}
 	}
-	glEnd();	
+	glEnd();
+	*/
 	glPopMatrix();
 
 	glPopMatrix(); //fin push 0
@@ -186,7 +195,7 @@ void keyboard(unsigned char key, int x, int y)
    {
 	 double dif;
    case 27: 
-	   //Piramide = new ~Model(); //Finalizamos la clase dinamica
+	   delete Piramide; //Finalizamos la clase dinamica
 	   exit(0);	
 	   break;
 

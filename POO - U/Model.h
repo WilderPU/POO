@@ -4,7 +4,7 @@ class Model
 public:
 	Model();
 	~Model();
-	void CalcNormV();
+	void CalcNormModel();
 	void DrawModel();
 private:
 	struct vertex

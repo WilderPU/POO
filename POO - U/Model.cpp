@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <GL/glut.h>
 #include <math.h>
 #include <time.h>
 
@@ -15,7 +16,7 @@ double vert_[5][3] = {{ 0.5, 0.0, -0.5}, // 0
 					  { 0.0, 1.0,  0.0}  // 5
 };
 
-//				0  1  2
+//				    0  1  2
 int face_[6][3] = {{0, 1, 4},  //0
 				   {1, 2, 4},  //1
 				   {2, 3, 4},  //2
@@ -23,17 +24,18 @@ int face_[6][3] = {{0, 1, 4},  //0
 				   {3, 2, 0},  //4
 				   {2, 1, 0}   //5
 };
-
+//Prototipo de la función
+void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
 Model::Model() //Inicializar datos de piramides
 {
 	nvert = 5;
 	V = new vertex[nvert]; //Inicia memoria dinamica
-	for (int i = 0; i < nvert; i++) {
-		V[i].ver[0] = vert_[i][0];
-		V[i].ver[1] = vert_[i][1];
-		V[i].ver[2] = vert_[i][2];
+	for (int j = 0; j < nvert; j++) {
+		V[j].ver[0] = vert_[j][0];
+		V[j].ver[1] = vert_[j][1];
+		V[j].ver[2] = vert_[j][2];
 	}
-
+	
 	nface = 6;
 	F = new face[nface];
 	for (int i = 0; i < nface; i++) {
@@ -42,7 +44,8 @@ Model::Model() //Inicializar datos de piramides
 		F[i].tri[2] = face_[i][2];
 	}
 
-
+	//CalcNormModel();
+	DrawModel();
 	
 }
 Model::~Model()
@@ -60,10 +63,52 @@ Model::~Model()
 En cambio los apuntadores * son un tipo de dato.
 */
 
-void Model::CalcNormV() {
-	//Escribir función
+
+void Model::CalcNormModel()
+{
+	for (int i = 0; i < nface; i++) // V[ 1 nertice de una cara]
+		CalcNormV(V[F[i].tri[0]].ver, V[F[i].tri[1]].ver, V[F[i].tri[2]].ver, F[i].N);
 }
 
-void Model::DrawModel() {
-	//Escribir función
+void Model::DrawModel()
+{
+	glBegin(GL_TRIANGLES);
+	double a[3], b[3], c[3], N[3];
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			a[j] = V[F[i].tri[0]].ver[0];
+			b[j] = V[F[i].tri[0]].ver[0];
+			c[j] = V[F[i].tri[0]].ver[0];
+		}
+
+		CalcNormV(a, b, c, N);
+		glNormal3dv(N);
+		for (int j = 0; j < 3; j++)
+		{
+			glVertex3d(V[F[i].tri[j]].ver[0], V[F[i].tri[j]].ver[1], V[F[i].tri[j]].ver[2]);
+		}
+	}
+	glEnd();
+}
+
+void CalcNormV(double a[3], double b[3], double c[3], double N[3])
+{
+	double Vab[3], Vac[3], norm;
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vab[i] = b[i] - a[i];
+		Vac[i] = c[i] - a[i];
+	}
+
+	N[0] = Vab[1] * Vac[2] - Vab[2] * Vac[1];
+	N[1] = Vab[2] * Vac[0] - Vab[0] * Vac[2];
+	N[2] = Vab[0] * Vac[1] - Vab[1] * Vac[0];
+
+	norm = sqrt(N[0] * N[0] + N[1] * N[1] + N[2] * N[2]);
+
+	for (int i = 0; i < 3; i++)
+		N[i] = N[i] / norm; //Este es el vector normal (unitario)
 }
