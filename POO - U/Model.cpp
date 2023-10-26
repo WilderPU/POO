@@ -25,26 +25,20 @@ int face_[6][3] = {{0, 1, 4},  //0
 				   {2, 1, 0}   //5
 };
 
-//Prototipo de la función
-void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
 
 Model::Model() //Inicializar datos de piramides
 {
 	nvert = 5;
 	V = new vertex[nvert]; //Inicia memoria dinamica
-	for (int j = 0; j < nvert; j++) {
-		V[j].ver[0] = vert_[j][0];
-		V[j].ver[1] = vert_[j][1];
-		V[j].ver[2] = vert_[j][2];
-	}
+	for (int j = 0; j < nvert; j++)
+		for (int i = 0; i < 3; i++)
+			V[j].ver[i] = vert_[j][i];
 	
 	nface = 6;
 	F = new face[nface];
-	for (int i = 0; i < nface; i++) {
-		F[i].tri[0] = face_[i][0];
-		F[i].tri[1] = face_[i][1];
-		F[i].tri[2] = face_[i][2];
-	}
+	for (int i = 0; i < nface; i++)
+		for (int j = 0; j < 3; j++)
+			F[i].tri[j] = face_[i][j];
 
 	//CalcNormModel();
 	DrawModel();
@@ -84,7 +78,7 @@ void Model::DrawModel()
 	glEnd();
 }
 
-void CalcNormV(double a[3], double b[3], double c[3], double N[3])
+void Model::CalcNormV(double a[3], double b[3], double c[3], double N[3])
 {
 	double Vab[3], Vac[3], norm;
 
