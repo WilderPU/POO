@@ -62,6 +62,7 @@ int face[6][3] = { {0, 1, 4},  //0
 
 //Class
 Model *Piramide;
+float mat_diff[] = {0.6, 0.6, 0.8, 1.0};
 /* Esta funcion esta en main.cpp
 //Prototipos de funciones
 //void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
@@ -107,6 +108,13 @@ void init(void)
 	//----------------------------
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FILL para mostrar la figura solida - LINE para ver solo las lineas - POINT para mostrar los vertices
 	
+	//Inicialización de los colores
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_blanco);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse_blanco);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular_blanco);
+	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess_blanco);
+
+
 	Piramide = new Model(); //Inicializo la clase dinamica
 	Piramide->CalcNormModel();
 }
@@ -122,13 +130,10 @@ void display(void)
 	//----------------------
 
 	// esfera 1
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_blanco);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse_blanco);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular_blanco);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess_blanco);
+	
 	
 	glPushMatrix();
-	Piramide->DrawModel(); //Con esto graficamos la piramide
+	Piramide->DrawModel(mat_diff); //Con esto graficamos la piramide
 	/* Esta función esta en el model.cpp
 	int dirf; //direccion en la lista de caras del vertice j
 	double N[3], a[3], b[3], c[3];

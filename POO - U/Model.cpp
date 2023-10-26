@@ -66,6 +66,11 @@ void Model::CalcNormModel()
 		CalcNormV(V[F[i].tri[0]].ver, V[F[i].tri[1]].ver, V[F[i].tri[2]].ver, F[i].N);
 }
 
+void Model::DrawModel(float dif[4]) {
+	glMaterialfv(GL_FRONT, GL_SPECULAR, dif);
+	DrawModel();
+}
+
 void Model::DrawModel()
 {
 	glBegin(GL_TRIANGLES);
