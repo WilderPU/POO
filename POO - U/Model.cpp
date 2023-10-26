@@ -24,8 +24,10 @@ int face_[6][3] = {{0, 1, 4},  //0
 				   {3, 2, 0},  //4
 				   {2, 1, 0}   //5
 };
+
 //Prototipo de la función
 void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
+
 Model::Model() //Inicializar datos de piramides
 {
 	nvert = 5;
@@ -73,22 +75,11 @@ void Model::CalcNormModel()
 void Model::DrawModel()
 {
 	glBegin(GL_TRIANGLES);
-	double a[3], b[3], c[3], N[3];
 	for (int i = 0; i < 6; i++)
 	{
+		glNormal3dv(F[i].N);
 		for (int j = 0; j < 3; j++)
-		{
-			a[j] = V[F[i].tri[0]].ver[0];
-			b[j] = V[F[i].tri[0]].ver[0];
-			c[j] = V[F[i].tri[0]].ver[0];
-		}
-
-		CalcNormV(a, b, c, N);
-		glNormal3dv(N);
-		for (int j = 0; j < 3; j++)
-		{
 			glVertex3d(V[F[i].tri[j]].ver[0], V[F[i].tri[j]].ver[1], V[F[i].tri[j]].ver[2]);
-		}
 	}
 	glEnd();
 }
