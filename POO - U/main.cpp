@@ -16,7 +16,7 @@
 //var tiempo
 clock_t start, end;
 //Movimiento y vista de la piramide
-float elapt = 5, inc;
+float elapt = 3, inc;
 float movx = -10;
 float escala = 15.0;
 float fc = 1.0;
@@ -48,7 +48,11 @@ float mat_shininess_blanco = 100.0;
 
 //Class
 Model* Piramide;
-float mat_diff[] = { 0.6, 0.6, 0.8, 1.0 };
+Model* Cubo;
+float mat_diff[] = { 1, 0.8, 0.8, 1.0 };
+
+//Cabeza
+//Model* Head;
 
 void IdLe()
 {
@@ -90,6 +94,9 @@ void init(void)
 
 
 	Piramide = new Model(); //Inicializo la clase dinamica
+	Cubo = new Model("cubo.dat");
+	//Head = new Model("HEAD.dat");
+	
 	//Piramide->CalcNormModel();
 	
 }
@@ -106,9 +113,16 @@ void display(void)
 
 	// Piramide
 
+	
 	glPushMatrix();
 	glTranslated(movx, 0.0, 0.0);
 	Piramide->DrawModel(mat_diff); //Con esto graficamos la piramide
+	glPopMatrix();
+	
+
+	glPushMatrix();
+	glTranslated(0.0, 0.0, 0.0);
+	Cubo->DrawModel(mat_diff); //Con esto graficamos la piramide
 	glPopMatrix();
 
 	glPopMatrix(); //fin push 0
@@ -247,9 +261,9 @@ void motion(int x, int y)
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitWindowSize(380, 380);
+	glutInitWindowSize(500, 500);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-	glutCreateWindow("Trackball en OpenGL");
+	glutCreateWindow("Piramide que se mueve XD");
 	init();
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);

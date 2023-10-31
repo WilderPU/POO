@@ -7,6 +7,9 @@
 #include <math.h>
 #include <time.h>
 
+#include <iostream>
+#include <fstream>
+
 #include "Model.h"
 
 //Piramide               0    1     2
@@ -45,12 +48,15 @@ Model::Model() //Inicializar datos de piramides
 	//DrawModel();
 	
 }
+
+Model::Model(std::string name) {
+	ReadM3D(name);
+}
+
 Model::~Model()
 {
 	if (V != NULL)
 		delete V; //Cierra la memoria dinamica, es IMPORTANTE para que no queden los datos en la RAM
-
-	
 
 	if (F != NULL)
 		delete F;
@@ -102,4 +108,26 @@ void Model::CalcNormV(double a[3], double b[3], double c[3], double N[3])
 
 	for (int i = 0; i < 3; i++)
 		N[i] = N[i] / norm; //Este es el vector normal (unitario)
+}
+
+
+
+void Model::ReadM3D(std::string name)
+{
+	std::ifstream infile;
+	infile.open(name);
+
+	infile >> nvert;
+	V = new vertex[nvert];
+	for (int i = 0; i < nvert; i++)
+		infile >> V[i].ver[0] >> V[i].ver[1] >> V[i].ver[2];
+
+	infile >> nface;
+	F = new face[nface];
+	for (int i = 0; i < nface; i++)
+		infile >> F[i].tri[0] >> F[i].tri[1] >> F[i].tri[2];
+
+	infile.close();
+
+	CalcNormModel();
 }
