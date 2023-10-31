@@ -1,3 +1,4 @@
+/* CÓDIGO DE WILDER */
 #include "Model.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,8 +41,8 @@ Model::Model() //Inicializar datos de piramides
 		for (int j = 0; j < 3; j++)
 			F[i].tri[j] = face_[i][j];
 
-	//CalcNormModel();
-	DrawModel();
+	CalcNormModel();
+	//DrawModel();
 	
 }
 Model::~Model()

@@ -1,3 +1,4 @@
+/* CÓDIGO DE WILDER */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +15,12 @@
 
 //var tiempo
 clock_t start, end;
-
-
+//Movimiento y vista de la piramide
+float elapt = 5, inc;
+float movx = -10;
+float escala = 15.0;
+float fc = 1.0;
+float FPS = 600;
 //------ Trackball ------------
 static GLint      mouse_state;
 static GLint      mouse_button;
@@ -41,54 +46,22 @@ float mat_diffuse_blanco[] = { 1.0, 1.0, 1.0, 1.0 };
 float mat_specular_blanco[] = { 1.0, 1.0, 1.0, 1.0 };
 float mat_shininess_blanco = 100.0;
 
-/*
-//Piramide               0    1     2
-double vert[5][3] = { { 0.5, 0.0, -0.5}, // 0
-					  {-0.5, 0.0, -0.5}, // 1
-					  {-0.5, 0.0,  0.5}, // 3
-					  { 0.5, 0.0,  0.5}, // 4
-					  { 0.0, 1.0,  0.0}  // 5
-};
-
-//					0  1  2
-int face[6][3] = { {0, 1, 4},  //0
-				   {1, 2, 4},  //1
-				   {2, 3, 4},  //2
-				   {3, 0, 4},  //3
-				   {3, 2, 0},  //4
-				   {2, 1, 0}   //5
-};
-*/
-
 //Class
-Model *Piramide;
-float mat_diff[] = {0.6, 0.6, 0.8, 1.0};
-/* Esta funcion esta en main.cpp
-//Prototipos de funciones
-//void CalcNormV(double a[3], double b[3], double c[3], double N[3]);
+Model* Piramide;
+float mat_diff[] = { 0.6, 0.6, 0.8, 1.0 };
 
-
-
-void CalcNormV(double a[3], double b[3], double c[3], double N[3])
+void IdLe()
 {
-	double Vab[3], Vac[3], norm;
-
-	for (int i = 0; i < 3; i++)
-	{
-		Vab[i] = b[i] - a[i];
-		Vac[i] = c[i] - a[i];
-	}
-
-	N[0] = Vab[1] * Vac[2] - Vab[2] * Vac[1];
-	N[1] = Vab[2] * Vac[0] - Vab[0] * Vac[2];
-	N[2] = Vab[0] * Vac[1] - Vab[1] * Vac[0];
-
-	norm = sqrt(N[0] * N[0] + N[1] * N[1] + N[2] * N[2]);
-
-	for (int i = 0; i < 3; i++)
-		N[i] = N[i] / norm; //Este es el vector normal (unitario)
+	inc = 20.0 / (elapt * FPS);
+	//fc = 1;
+	if (movx >= 10.0)
+		fc = -1;
+	else if (movx <= -10.0)
+		fc = 1;
+	movx += inc * fc;
+	glutPostRedisplay();
 }
-*/
+
 
 void init(void)
 {
@@ -101,13 +74,14 @@ void init(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpc);
+
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	//------ Trackball -----------
 	gltbInit(GLUT_LEFT_BUTTON/*GLUT_MIDDLE_BUTTON*/);
 	//----------------------------
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //FILL para mostrar la figura solida - LINE para ver solo las lineas - POINT para mostrar los vertices
-	
+
 	//Inicialización de los colores
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_blanco);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse_blanco);
@@ -116,7 +90,8 @@ void init(void)
 
 
 	Piramide = new Model(); //Inicializo la clase dinamica
-	Piramide->CalcNormModel();
+	//Piramide->CalcNormModel();
+	
 }
 
 void display(void)
@@ -129,39 +104,17 @@ void display(void)
 	gltbMatrix();
 	//----------------------
 
-	// esfera 1
-	
-	
-	glPushMatrix();
-	Piramide->DrawModel(mat_diff); //Con esto graficamos la piramide
-	/* Esta función esta en el model.cpp
-	int dirf; //direccion en la lista de caras del vertice j
-	double N[3], a[3], b[3], c[3];
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 6; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			a[j] = vert[face[i][0]][j];
-			b[j] = vert[face[i][1]][j];
-			c[j] = vert[face[i][2]][j];
-		}
+	// Piramide
 
-		CalcNormV(a, b, c, N);
-		glNormal3dv(N);
-		for (int j = 0; j < 3; j++)
-		{
-			dirf = face[i][j];
-			glVertex3d(vert[dirf][0], vert[dirf][1], vert[dirf][2]);
-		}
-	}
-	glEnd();
-	*/
+	glPushMatrix();
+	glTranslated(movx, 0.0, 0.0);
+	Piramide->DrawModel(mat_diff); //Con esto graficamos la piramide
 	glPopMatrix();
 
 	glPopMatrix(); //fin push 0
 	glFlush();
 	glutSwapBuffers();
+
 }
 
 
@@ -182,114 +135,114 @@ void reshape(int w, int h)
 	glLoadIdentity();
 
 	//------ Trackball -----------
-	glTranslatef(0.0, 0.0, -5.0);
+	glTranslatef(0.0, 0.0, -escala);
 	//----------------------------
-}//*/
+}
 
 
 void keyboard(unsigned char key, int x, int y)
 {
 
- switch (key)
-   {
-	 double dif;
-   case 27: 
-	   delete Piramide; //Finalizamos la clase dinamica
-	   exit(0);	
-	   break;
+	switch (key)
+	{
+		double dif;
+	case 27:
+		delete Piramide; //Finalizamos la clase dinamica
+		exit(0);
+		break;
 
-   case 's':
-   case 'S':
-	   start = clock();
-	   printf("input down or socd:2\n");
-	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	   glutPostRedisplay();
-	   break;
+	case 's':
+	case 'S':
+		start = clock();
+		printf("input down or socd:2\n");
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glutPostRedisplay();
+		break;
 
-   case 'd':
-   case 'D':
-	   end = clock();
-	   dif = (end-start) * 1.0 / CLOCKS_PER_SEC;
-	   printf("input down or socd:6, %lg(sec)\n", dif);
-	   break;
+	case 'd':
+	case 'D':
+		end = clock();
+		dif = (end - start) * 1.0 / CLOCKS_PER_SEC;
+		printf("input down or socd:6, %lg(sec)\n", dif);
+		break;
 
-   case 'N':
-   case 'n':
-	   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	   glLineWidth(3.0);
-	   glutPostRedisplay();
-	   break;
-   case 'b':
-   case 'B':
-	   glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	   glPointSize(5.0);
-	   glutPostRedisplay();
-	   break;
-   case 'm':
-   case 'M':
-	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	   glutPostRedisplay();
-	   break;
+	case 'N':
+	case 'n':
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glLineWidth(3.0);
+		glutPostRedisplay();
+		break;
+	case 'b':
+	case 'B':
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		glPointSize(5.0);
+		glutPostRedisplay();
+		break;
+	case 'm':
+	case 'M':
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glutPostRedisplay();
+		break;
 
-   }
-}//*/
+	}
+}
 
 
 
 //----- Tracknall -----------
 void mouse(int button, int state, int x, int y)
 {
- GLdouble model[4*4];
- GLdouble proj[4*4];
- GLint view[4];
+	GLdouble model[4 * 4];
+	GLdouble proj[4 * 4];
+	GLint view[4];
 
- // fix for two-button mice -- left mouse + shift = middle mouse
- if (button == GLUT_LEFT_BUTTON && glutGetModifiers() & GLUT_ACTIVE_SHIFT)
-	button = GLUT_MIDDLE_BUTTON;
- gltbMouse(button, state, x, y);
- mouse_state = state;
- mouse_button = button;
- if (state == GLUT_DOWN && button == GLUT_MIDDLE_BUTTON)
+	// fix for two-button mice -- left mouse + shift = middle mouse
+	if (button == GLUT_LEFT_BUTTON && glutGetModifiers() & GLUT_ACTIVE_SHIFT)
+		button = GLUT_MIDDLE_BUTTON;
+	gltbMouse(button, state, x, y);
+	mouse_state = state;
+	mouse_button = button;
+	if (state == GLUT_DOWN && button == GLUT_MIDDLE_BUTTON)
 	{
-	glGetDoublev(GL_MODELVIEW_MATRIX, model);
-	glGetDoublev(GL_PROJECTION_MATRIX, proj);
-	glGetIntegerv(GL_VIEWPORT, view);
-	gluProject((GLdouble)x, (GLdouble)y, 0.0,
-				model, proj, view,
-				&pan_x, &pan_y, &pan_z);
-	gluUnProject((GLdouble)x, (GLdouble)y, pan_z,
-				 model, proj, view,
-				 &pan_x, &pan_y, &pan_z);
-	pan_y = -pan_y;
+		glGetDoublev(GL_MODELVIEW_MATRIX, model);
+		glGetDoublev(GL_PROJECTION_MATRIX, proj);
+		glGetIntegerv(GL_VIEWPORT, view);
+		gluProject((GLdouble)x, (GLdouble)y, 0.0,
+			model, proj, view,
+			&pan_x, &pan_y, &pan_z);
+		gluUnProject((GLdouble)x, (GLdouble)y, pan_z,
+			model, proj, view,
+			&pan_x, &pan_y, &pan_z);
+		pan_y = -pan_y;
 	}
- glutPostRedisplay();
+	glutPostRedisplay();
 }
-//*/
+
 
 //------ Trackball--------------------
 
 void motion(int x, int y)
 {
- GLdouble model[4*4];
- GLdouble proj[4*4];
- GLint view[4];
+	GLdouble model[4 * 4];
+	GLdouble proj[4 * 4];
+	GLint view[4];
 
- gltbMotion(x, y);
- if (mouse_state == GLUT_DOWN && mouse_button == GLUT_MIDDLE_BUTTON)
+	gltbMotion(x, y);
+	if (mouse_state == GLUT_DOWN && mouse_button == GLUT_MIDDLE_BUTTON)
 	{
-	glGetDoublev(GL_MODELVIEW_MATRIX, model);
-	glGetDoublev(GL_PROJECTION_MATRIX, proj);
-	glGetIntegerv(GL_VIEWPORT, view);
-	gluProject((GLdouble)x, (GLdouble)y, 0.0,
-				model, proj, view,
-				&pan_x, &pan_y, &pan_z);
-	gluUnProject((GLdouble)x, (GLdouble)y, pan_z,
-				model, proj, view,
-				&pan_x, &pan_y, &pan_z);
-	pan_y = -pan_y;
+		glGetDoublev(GL_MODELVIEW_MATRIX, model);
+		glGetDoublev(GL_PROJECTION_MATRIX, proj);
+		glGetIntegerv(GL_VIEWPORT, view);
+		gluProject((GLdouble)x, (GLdouble)y, 0.0,
+			model, proj, view,
+			&pan_x, &pan_y, &pan_z);
+		gluUnProject((GLdouble)x, (GLdouble)y, pan_z,
+			model, proj, view,
+			&pan_x, &pan_y, &pan_z);
+		pan_y = -pan_y;
 	}
- glutPostRedisplay();
-}//*/
+	glutPostRedisplay();
+}
 
 int main(int argc, char** argv)
 {
@@ -300,7 +253,10 @@ int main(int argc, char** argv)
 	init();
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-	glutKeyboardFunc(keyboard);
+	glutIdleFunc(IdLe);
+	//------------------------
+	//glutKeyboardUpFunc(keyboardUp); //Funcion de flanco de subida
+	glutKeyboardFunc(keyboard); //Funcion de flanco de bajada
 	//----- Trackball --------
 	glutMouseFunc(mouse);
 	glutMotionFunc(motion);
