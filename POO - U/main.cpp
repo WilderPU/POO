@@ -36,20 +36,22 @@ float LightDif[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 float LightSpc[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 //Azul
+/*
 float mat_ambient_azul[] = { 0.0, 0.0, 0.25, 1.0 };
 float mat_diffuse_azul[] = { 0.0, 0.0, 1.0, 1.0 };
 float mat_specular_azul[] = { 1.0, 1.0, 1.0, 1.0 };
 float mat_shininess_azul = 100.0;
+*/
 //Blanco
 float mat_ambient_blanco[] = { 0.25, 0.25, 0.25, 1.0 };
 float mat_diffuse_blanco[] = { 1.0, 1.0, 1.0, 1.0 };
-float mat_specular_blanco[] = { 1.0, 1.0, 1.0, 1.0 };
+float mat_specular_blanco[] = { 1.0, 1.0, 0.0, 1.0 };
 float mat_shininess_blanco = 100.0;
 
 //Class
 Model* Piramide;
 Model* Cubo;
-float mat_diff[] = { 1, 0.8, 0.8, 1.0 };
+float mat_diff[] = { 1.0, 1.0, 0.0, 1.0 };
 
 //Cabeza
 //Model* Head;
@@ -66,14 +68,16 @@ void IdLe()
 	glutPostRedisplay();
 }
 
+//Clase heredada
+Ken* K;
 
 void init(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
-	glCullFace(GL_BACK);
+	glCullFace(GL_BACK); //Permite ver el lado contrario a las caras
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE); //Permite ver el lado contrario a las caras
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);
@@ -95,6 +99,7 @@ void init(void)
 
 	Piramide = new Model(); //Inicializo la clase dinamica
 	Cubo = new Model("cubo.dat");
+	K = new Ken("HEAD.dat");
 	//Head = new Model("HEAD.dat");
 	
 	//Piramide->CalcNormModel();
@@ -144,7 +149,7 @@ void reshape(int w, int h)
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 0.01, 100.0);
+	gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -162,6 +167,7 @@ void keyboard(unsigned char key, int x, int y)
 		double dif;
 	case 27:
 		delete Piramide; //Finalizamos la clase dinamica
+		delete K;
 		exit(0);
 		break;
 
@@ -197,7 +203,14 @@ void keyboard(unsigned char key, int x, int y)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glutPostRedisplay();
 		break;
-
+	/*case 'x':
+		escala += 10.0;
+		glutPostRedisplay();
+		break;
+	case 'c':
+		escala -= 10.0;
+		glutPostRedisplay();
+		break;//*/
 	}
 }
 

@@ -12,6 +12,7 @@
 
 #include "Model.h"
 
+
 //Piramide               0    1     2
 double vert_[5][3] = {{ 0.5, 0.0, -0.5}, // 0
 					  {-0.5, 0.0, -0.5}, // 1
@@ -74,14 +75,14 @@ void Model::CalcNormModel()
 }
 
 void Model::DrawModel(float dif[4]) {
-	glMaterialfv(GL_FRONT, GL_SPECULAR, dif);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, dif);
 	DrawModel();
 }
 
 void Model::DrawModel()
 {
 	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < nface; i++)
 	{
 		glNormal3dv(F[i].N);
 		for (int j = 0; j < 3; j++)
@@ -130,4 +131,9 @@ void Model::ReadM3D(std::string name)
 	infile.close();
 
 	CalcNormModel();
+}
+
+//Metodos de la clase Ken
+Ken::Ken(std::string name) {
+	ReadM3D(name);
 }

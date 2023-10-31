@@ -3,17 +3,16 @@
 #include <iostream>
 class Model
 {
-public:
+public: // Todos los metodos estan disponibles para todo el público
 	Model();
 	Model(std::string name);
 	~Model();
 	void DrawModel();
 	void DrawModel(float diff[4]);
 	
-private:
+private: //Esta disponible solo para la clase
 	void CalcNormModel();
 	void Model::CalcNormV(double a[3], double b[3], double c[3], double N[3]);
-	void ReadM3D(std::string name);
 	struct vertex
 	{
 		double ver[3];
@@ -26,7 +25,12 @@ private:
 	int nvert, nface;
 	vertex *V;
 	face *F;
+protected: //Esta disponible para las clases heredadas
+	void ReadM3D(std::string name);
 };
 
-
-
+//Herencia
+class Ken :public Model {
+public:
+	Ken(std::string name);
+};
