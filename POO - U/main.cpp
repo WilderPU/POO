@@ -16,7 +16,6 @@
 //var tiempo
 clock_t start, end;
 //Movimiento y vista de la piramide
-float elapt = 3, inc;
 float movx = -10;
 float escala = 15.0;
 float fc = 1.0;
@@ -56,15 +55,21 @@ float mat_diff[] = { 1.0, 1.0, 0.0, 1.0 };
 //Cabeza
 //Model* Head;
 
+
+// VARIABLES PARA CALCULAR LAS NORMALES
+clock_t ini_t, end_t;
+int numberFrames = 0;
+float elapt = 5, incremento;
+
 void IdLe()
 {
-	inc = 20.0 / (elapt * FPS);
+	incremento = 20.0 / (elapt * FPS);
 	//fc = 1;
 	if (movx >= 10.0)
 		fc = -1;
 	else if (movx <= -10.0)
 		fc = 1;
-	movx += inc * fc;
+	movx += incremento * fc;
 	glutPostRedisplay();
 }
 
@@ -113,6 +118,7 @@ void display(void)
 	//gluLookAt(0.0, 0.0, 10, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	//------ Trackball -----
+	glTranslatef(0.0, 0.0, -escala); //Con esto y el case x&c puedo agrandar o achicar las fíguras
 	gltbMatrix();
 	//----------------------
 
@@ -134,6 +140,19 @@ void display(void)
 	glFlush();
 	glutSwapBuffers();
 
+	/*   CALCULO DE LOS FPS   */
+
+	numberFrames++;
+	end_t = clock();
+
+	if ((float)(end_t - ini_t) * 1.0 / (float)CLOCKS_PER_SEC >= 1.0) {
+		FPS = (int)numberFrames;
+		numberFrames = 0;
+		ini_t = end_t;
+		std::cout << "FPS = " << FPS << std::endl;
+	}
+
+
 }
 
 
@@ -153,15 +172,13 @@ void reshape(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//------ Trackball -----------
-	glTranslatef(0.0, 0.0, -escala);
-	//----------------------------
+	
 }
 
 
 void keyboard(unsigned char key, int x, int y)
 {
-
+	start = clock();
 	switch (key)
 	{
 		double dif;
@@ -173,17 +190,18 @@ void keyboard(unsigned char key, int x, int y)
 
 	case 's':
 	case 'S':
-		start = clock();
-		printf("input down or socd:2\n");
+		end = clock();
+		dif = (end - start) * 1.0 / CLOCKS_PER_SEC;
+		printf("input down or socd:2, %lg(sec)\n", dif);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glutPostRedisplay();
 		break;
 
 	case 'd':
 	case 'D':
-		end = clock();
-		dif = (end - start) * 1.0 / CLOCKS_PER_SEC;
-		printf("input down or socd:6, %lg(sec)\n", dif);
+		
+		//dif = (end - start) * 1.0 / CLOCKS_PER_SEC;
+		//printf("input down or socd:6, %lg(sec)\n", dif);
 		break;
 
 	case 'N':
@@ -203,14 +221,28 @@ void keyboard(unsigned char key, int x, int y)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glutPostRedisplay();
 		break;
-	/*case 'x':
-		escala += 10.0;
+	case 'x':
+	case 'X':
+		escala -= 1.0;
 		glutPostRedisplay();
 		break;
-	case 'c':
-		escala -= 10.0;
+	case 'z':
+	case 'Z':
+		escala += 1.0;
 		glutPostRedisplay();
 		break;//*/
+	case 'c':
+	case 'C':
+		elapt -= 1.0;
+		glutPostRedisplay();
+		break;
+	case 'v':
+	case 'V':
+		elapt += 1.0;
+		glutPostRedisplay();
+		break;
+	case 65:
+		printf("A%95");
 	}
 }
 
